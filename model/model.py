@@ -30,12 +30,32 @@ class DepositoStrumenti:
     def responsabile(self, responsabile):
         self._responsabile = responsabile
 
-    def get_strumenti(self) -> list[Strumento] | None:
+    def get_strumenti(self) -> list[Strumento] | None:  # Annotazione di tipo: significa "restituisce una lista di strumenti oppure None"
         """
             Funzione che legge tutti gli strumenti nel database
             :return: una lista con tutti gli strumenti presenti oppure None
         """
-        # TODO
+        cnx = get_connection()  # Chiamo get connection per connettermi
+        if cnx is None:  # connessione fallita
+            return None
+
+        cursor = None
+        try:
+            cursor = cnx.cursor(dictionary=True)    # Mi apro un cursore dizionario
+            cursor.execute("SELECT * FROM strumento")   # Esegue la query e cursor si carica di tutti i dati che ne deriva
+
+            strumenti = []  # Mi creo la lista degli strumenti
+            for row in cursor:
+                strumenti.append(Strumento(row["codice"], row["tipo"], row["marca"], row["anno_acquisto"], row["valore"], bool(row["disponibile"])))
+                # Appendo alla lista degli strumenti un oggetto strumento con tutte le righe prese dal database come variabili
+            return strumenti
+        except Exception as e:
+            print(f"Errore durante la lettura degli strumenti: {e}")
+            return None
+        finally:
+            if cursor is not None:
+                cursor.close()  # Chiudere sempre il cursore
+            cnx.close()
 
     def cerca_strumenti_per_tipo(self, tipo) -> list[Strumento] | None:
         """
@@ -43,4 +63,25 @@ class DepositoStrumenti:
             :param tipo: il tipo dello strumento (es. "Chitarra")
             :return: una lista con tutti gli strumenti del tipo indicato oppure None
         """
-        # TODO
+        # Meglio sempre creare una connessione e un cursore per ogni funzione che interroga il DB
+        cnx = get_connection()
+        if cnx is None:
+            return None
+
+        cursor = None
+        try:
+            cursor = cnx.cursor(dictionary=True)
+            cursor.execute("SELECT * FROM strumento WHERE tipo = %s", (tipo,))  # Segnaposto %s che verrà sostituita da "tipo,"
+            # La virgola dopo tipo è fondamentale dato che ci permettere di assegnare un valore a tipo che è quello prelevato dal DB
+
+            strumenti = []
+            for row in cursor:
+                strumenti.append(Strumento(row["codice"], row["tipo"], row["marca"], row["anno_acquisto"], row["valore"], bool(row["disponibile"])))
+            return strumenti
+        except Exception as e:
+            print(f"Errore durante la ricerca per tipo: {e}")
+            return None
+        finally:
+            if cursor is not None:
+                cursor.close()
+            cnx.close()
