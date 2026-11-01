@@ -1,5 +1,6 @@
 import flet as ft
 from UI.alert import AlertManager
+# In tutti i file grafici è fondamentale importare flet: ora importo anche l'alert
 
 '''
     VIEW:
@@ -7,8 +8,15 @@ from UI.alert import AlertManager
     - Riceve i dati dal MODELLO e li presenta senza modificarli
 '''
 
+# Prima definisco gli attributi in init mettendo i testi principali e definendo alert e controller, allineamento, tema
+# Poi definisco funzioni che chiamino alert, controller e cambino tema e la funzione cambia pagina
+# Poi definisco i testi scritti, a seguire i textfield in input e poi i bottoni e gli switch
+# Poi setto il layout finale
+# TUTTO CIO' VA FATTO PREFERIBILMENTE NELL'UNICA FUNZIONE LOAD INTERFACE
 
-class View:
+
+
+class View: # Classe che prepara la pagina grafica
     def __init__(self, page: ft.Page):
         # Page
         self.page = page
@@ -17,10 +25,10 @@ class View:
         self.page.theme_mode = ft.ThemeMode.DARK
 
         # Alert
-        self.alert = AlertManager(page)
+        self.alert = AlertManager(page)  # Inserisco l'alert
 
         # Controller
-        self.controller = None
+        self.controller = None   # Preparo il controller
 
         # Elementi UI
         self.txt_titolo = None
@@ -29,7 +37,7 @@ class View:
         # Non obbligatorio mettere già qui tutti gli elementi UI
 
     def show_alert(self, messaggio):
-        self.alert.show_alert(messaggio)
+        self.alert.show_alert(messaggio)    # Chiamo questa funzione (con il suo nome) sull'alert (con il suo nome)
 
     def set_controller(self, controller):
         """ Imposta il controller alla pagina """
@@ -47,6 +55,10 @@ class View:
             weight=ft.FontWeight.BOLD
         )
 
+# Le funzioni sopra riempiono gli attributi vuoti
+# Il txt mi permette di mostrare una scritta, il TextField mi permette di creare una casella di input testuale
+# Listview permette il contenimento di dati gestendo automaticamente lo scroll
+
         # TextField per responsabile
         self.input_responsabile = ft.TextField(value=self.controller.get_responsabile(), label="Responsabile")
 
@@ -62,19 +74,19 @@ class View:
         # --- PULSANTI e TOGGLE associati a EVENTI ---
         self.toggle_cambia_tema = ft.Switch(label="Tema scuro", value=True, on_change=self.cambia_tema)
         pulsante_conferma_responsabile = ft.Button("Conferma", on_click=self.controller.conferma_responsabile)
-
-        # Altri Pulsanti da implementare (es. "Mostra" e "Cerca")
         pulsante_mostra_strumenti = ft.Button("Mostra", on_click=self.controller.mostra_strumenti)
         pulsante_cerca_strumenti = ft.Button("Cerca", on_click=self.controller.cerca_strumenti)
 
-        # --- LAYOUT ---
+        # Button e un bottone, switch è un interruttore
+
+        # --- LAYOUT ---    (quindi ora gestisco l'organizzazione visiva della pagina)
         self.page.add(
             self.toggle_cambia_tema,
 
             # Sezione 1
             self.txt_titolo,
             self.txt_responsabile,
-            ft.Divider(),
+            ft.Divider(),   # Barra dividitrice
 
             # Sezione 2
             ft.Text("Modifica Informazioni", size=20),
@@ -102,3 +114,5 @@ class View:
         self.page.theme_mode = ft.ThemeMode.DARK if self.toggle_cambia_tema.value else ft.ThemeMode.LIGHT
         self.toggle_cambia_tema.label = "Tema scuro" if self.toggle_cambia_tema.value else "Tema chiaro"
         self.page.update()
+        # Cambio il tema, aggiorno la scritta, aggiorno la pagina
+

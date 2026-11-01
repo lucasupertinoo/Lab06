@@ -1,5 +1,6 @@
 from database.DB_connect import get_connection
 from model.strumento import Strumento
+# Nel model.py importo le classi create nella cartella model che mi servono e anche il connector al database
 
 '''
     MODELLO:
@@ -29,6 +30,8 @@ class DepositoStrumenti:
     def responsabile(self, responsabile):
         self._responsabile = responsabile
 
+# Definisco come sopra il deposito degli strumenti rappresentando la struttura dei dati
+
     def get_strumenti(self) -> list[Strumento] | None:  # Annotazione di tipo: significa "restituisce una lista di strumenti oppure None"
         """
             Funzione che legge tutti gli strumenti nel database
@@ -55,6 +58,8 @@ class DepositoStrumenti:
             if cursor is not None:
                 cursor.close()  # Chiudere sempre il cursore
             cnx.close()
+
+# Come sopra, mi definisco la funzione che parla con il db prendendone i dati e mettendoli in una struttura dati
 
     def cerca_strumenti_per_tipo(self, tipo) -> list[Strumento] | None:
         """
@@ -84,3 +89,5 @@ class DepositoStrumenti:
             if cursor is not None:
                 cursor.close()
             cnx.close()
+
+# Creo l'altra funzione che mi serve in base alle richieste: se devo ne servono altre le aggiungo sotto

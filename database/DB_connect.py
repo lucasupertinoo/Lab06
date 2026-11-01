@@ -1,6 +1,6 @@
-import mysql.connector
-from mysql.connector import errorcode
-import pathlib
+import mysql.connector  # Importo il connettore
+from mysql.connector import errorcode   # Dal connettore importo l'errorcode da sollevare
+import pathlib  # pathlib gestisce i percorsi del file system ottimizzandoli per l'OOP
 
 
 def get_connection() -> mysql.connector.connection:
@@ -19,3 +19,5 @@ def get_connection() -> mysql.connector.connection:
         else:
             print(err)
             return None
+
+# Sequenza standard di comandi, ovviamente adattando i nomi, per ottenere una connessione

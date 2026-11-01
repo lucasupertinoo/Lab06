@@ -4,10 +4,13 @@ from model.model import DepositoStrumenti
 from UI.view import View
 from UI.controller import Controller
 
+# Nel main importo flet, model, controller e view
+
 '''
 DA ESEGUIRE
 '''
 
+# Chiamo le varie funioni presenti nei vari file per settare controller, pagina, vista, interfaccia e model e poi runno
 def main(page: ft.Page):
     my_model = DepositoStrumenti("Deposito Strumenti Musicali", "Alessandro Visconti")
     my_view = View(page)

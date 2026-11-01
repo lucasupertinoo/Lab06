@@ -1,4 +1,5 @@
 import flet as ft
+# Anche l'alert è universale e va bene in ogni programma nella sua struttura globale
 
 class AlertManager:
     def __init__(self, page: ft.Page):
